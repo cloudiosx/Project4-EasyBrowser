@@ -86,7 +86,14 @@ class ViewController: UIViewController, WKNavigationDelegate {
                     return
                 }
             }
+        } else {
+            decisionHandler(.cancel)
+            return
         }
+        
+        let ac = UIAlertController(title: "This URL isn't allowed", message: nil, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Go back", style: .cancel))
+        present(ac, animated: true)
         decisionHandler(.cancel)
     }
     
