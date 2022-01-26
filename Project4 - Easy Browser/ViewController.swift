@@ -8,26 +8,22 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKNavigationDelegate {
+class ViewController: UITableViewController, WKNavigationDelegate {
     
     var webView: WKWebView!
     var progressView: UIProgressView!
     var websiteToLoadInitially = ["apple.com"]
     var websitesToLoadAsOptions = ["apple.com", "google.com", "hackingwithswift.com"]
     
-    override func loadView() {
-        webView = WKWebView()
-        webView.navigationDelegate = self
-        view = webView
-    }
+//    override func loadView() {
+//        webView = WKWebView()
+//        webView.navigationDelegate = self
+//        view = webView
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
-        // KVO
-        
-        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         
         // UIBarButtonItem
         
@@ -50,7 +46,33 @@ class ViewController: UIViewController, WKNavigationDelegate {
         navigationController?.isToolbarHidden = false
         
 //        let url = URL(string: "https://www.apple.com")!
-        let url = URL(string: "https://" + websiteToLoadInitially[0])!
+//        let url = URL(string: "https://" + websiteToLoadInitially[0])!
+//        webView.load(URLRequest(url: url))
+        
+    }
+    
+    // UITableViewController
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return websitesToLoadAsOptions.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Website", for: indexPath)
+        cell.textLabel?.text = websitesToLoadAsOptions[indexPath.row]
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        webView = WKWebView()
+        webView.navigationDelegate = self
+        view = webView
+        
+        // KVO
+        
+        webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+        
+        let url = URL(string: "https://" + websitesToLoadAsOptions[indexPath.row])!
         webView.load(URLRequest(url: url))
         webView.allowsBackForwardNavigationGestures = true
     }
