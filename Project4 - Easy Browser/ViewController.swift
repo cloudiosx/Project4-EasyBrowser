@@ -64,6 +64,9 @@ class ViewController: UITableViewController, WKNavigationDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // Set WKWebView to be the root view of the view controller's view hierarchy
+        
         webView = WKWebView()
         webView.navigationDelegate = self
         view = webView
